@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { environmentConfiguration } from 'config/environment/environment-configuration';
+import { GameUseCasesModule } from './use-case/game/game-use-case.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		ConfigModule.forRoot({
+			envFilePath: `${process.cwd()}/.env.local`,
+			isGlobal: true,
+			load: [environmentConfiguration],
+		}),
+		GameUseCasesModule,
+	],
 })
 export class AppModule {}
