@@ -1,4 +1,18 @@
 {
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": true,
+  "semi": true,  
   "singleQuote": true,
-  "trailingComma": "all"
+  "quoteProps": "preserve",  
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "arrowParens": "always",
+  "parser": "typescript",
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "css",
+  "endOfLine": "auto",
+  "embeddedLanguageFormatting": "auto",
+  "singleAttributePerLine": false
 }
