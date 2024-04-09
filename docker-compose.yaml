@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15.3
+    restart: always
+    container_name: cloud_gaming_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - 5431:5432
