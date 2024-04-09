@@ -37,6 +37,7 @@ type ExtenalGame = {
 export type GameList = {
 	luna: ExtenalGame[];
 	xbox: ExtenalGame[];
+	gfn: [];
 };
 
 @Injectable()
@@ -47,6 +48,11 @@ export class GameDataService {
 	private readonly token = this.configService.get<IgdbConfigurationProperties>('igdbApi').clientSecret;
 	private readonly baseUrl = this.configService.get<IgdbConfigurationProperties>('igdbApi').baseUrl;
 	private readonly limit = 200;
+	private readonly headers = {
+		Authorization: `Bearer ${this.token}`,
+		'Client-ID': this.clientId,
+		'Content-Type': 'application/json',
+	};
 
 	/**
 	 * Create an array of platforms from the query string
@@ -98,18 +104,17 @@ export class GameDataService {
 	 * @returns - The count of games
 	 */
 	async getGameCount(platform: string): Promise<number> {
+		const body = this.createQuery(platform, 'Y', { field: 'name', order: 'asc' }, this.limit);
 		if (platform) {
 			const response = await fetch(`${this.baseUrl}/external_games/count`, {
-				body: this.createQuery(platform, 'Y', { field: 'name', order: 'asc' }, this.limit),
-				headers: {
-					Authorization: `Bearer ${this.token}`,
-					'Client-ID': this.clientId,
-					'Content-Type': 'application/json',
-				},
+				body,
+				headers: this.headers,
 				method: 'POST',
 				mode: 'cors',
 			});
 			const result: { count: number } = await response.json();
+			if (platform.split(',').includes('gfn')) {
+			}
 
 			return result.count;
 		} else {
@@ -133,17 +138,14 @@ export class GameDataService {
 		);
 		const response = await fetch(`${this.baseUrl}/external_games`, {
 			body,
-			headers: {
-				Authorization: `Bearer ${this.token}`,
-				'Client-ID': this.clientId,
-				'Content-Type': 'application/json',
-			},
+			headers: this.headers,
 			method: 'POST',
 			mode: 'cors',
 		});
 
 		const result: ExtenalGame[] = await response.json();
 		const sortedResult: GameList = {
+			gfn: [],
 			luna: [],
 			xbox: [],
 		};
