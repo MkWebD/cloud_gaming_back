@@ -91,8 +91,9 @@ export class GameDataService {
 		limit: number,
 		extendedFields?: string,
 	): string {
+		const letterParameter = letter ? `& name = "${letter.toLocaleUpperCase()}"*` : '';
 		const platforms = this.createPlatformsArray(platform)
-			.map((platform) => `(category = ${platform} & name = "${letter}"* )`)
+			.map((platform) => `(category = ${platform}${letterParameter} )`)
 			.join(' | ');
 		const additionalFields = extendedFields ? `,${extendedFields}` : '';
 		return `where ${platforms}; fields *${additionalFields}; sort ${sort.field} ${sort.order}; limit ${limit};`;
@@ -101,10 +102,11 @@ export class GameDataService {
 	/**
 	 * Retrieve the count of games from the IGDB API
 	 * @param platform - The platform query parameter
+	 * @param letter - The letter parameter
 	 * @returns - The count of games
 	 */
-	async getGameCount(platform: string): Promise<number> {
-		const body = this.createQuery(platform, 'Y', { field: 'name', order: 'asc' }, this.limit);
+	async getGameCount(platform: string, letter: string): Promise<number> {
+		const body = this.createQuery(platform, letter, { field: 'name', order: 'asc' }, this.limit);
 		if (platform) {
 			const response = await fetch(`${this.baseUrl}/external_games/count`, {
 				body,
