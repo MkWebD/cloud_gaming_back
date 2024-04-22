@@ -25,17 +25,11 @@ export class TypeOrmGenericRepository<T> implements ModelGenericRepository<T> {
 	/**
 	 * Saves a model to the database using session variable for logged user and returns the saved model
 	 * @param model - the prepared model to save
-	 * @param userId - the logged user id
 	 * @returns - the saved model
 	 */
-	async createModel(model: T, userId: string): Promise<T> {
+	async createModel(model: T): Promise<T> {
 		try {
-			return this._repository.manager.transaction(async () => {
-				if (userId) {
-					await this._repository.query(`SET SESSION "logged.user_id" = '${userId}';`);
-				}
-				return this._repository.save(model);
-			});
+			return this._repository.save(model);
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -135,20 +129,15 @@ export class TypeOrmGenericRepository<T> implements ModelGenericRepository<T> {
 	 * Update a model in the database using criteria and returns the updated model
 	 * @param options - criteria to find the model
 	 * @param model - the update model to save
-	 * @param userId - Id of the user responsible for the action
 	 * @returns - the updated model
 	 */
-	async updateModel(options: FindOneOptions<T>, model: T, userId: string): Promise<T> {
+	async updateModel(options: FindOneOptions<T>, model: T): Promise<T> {
 		try {
 			const entityToUpdate = await this.readOneModel(options);
 			if (!entityToUpdate) {
 				throw new NotFoundException('No entity found');
 			}
-
-			return this._repository.manager.transaction(async () => {
-				await this._repository.query(`SET SESSION "logged.user_id" = '${userId}';`);
-				return this._repository.save(this.deepMergeEntity(entityToUpdate, model));
-			});
+			return this._repository.save(this.deepMergeEntity(entityToUpdate, model));
 		} catch (error) {
 			throw new NotFoundException(error);
 		}

@@ -12,42 +12,30 @@ export abstract class GenericRepository<EntityType, CreateEntityDtoType, UpdateE
 	/**
 	 * Generic create method
 	 * @param createEntityDto - create entity dto
-	 * @param userId - user id
-	 * @param additionalId - additional id
 	 */
-	abstract create(createEntityDto: CreateEntityDtoType, userId: string, additionalId?: number): Promise<EntityType>;
+	abstract create(createEntityDto: CreateEntityDtoType): Promise<EntityType>;
 
 	/**
 	 * Generic read all method could be paginated
 	 * @param options - find many options
-	 * @param userId - user id
 	 */
-	abstract readAll(pageOptionsDto: PageOptionsDto, userId?: number): Promise<GenericOptionsDto<EntityType>>;
+	abstract readAll(pageOptionsDto: PageOptionsDto): Promise<GenericOptionsDto<EntityType>>;
 	/**
 	 * Generic read one method
 	 * @param id - entity id
-	 * @param additionalId - additional id
 	 */
-	abstract readOne(id: string, additionalId?: number): Promise<EntityType>;
+	abstract readOne(id: number): Promise<EntityType>;
 
 	/**
 	 * Generic update method
 	 * @param id - entity id
 	 * @param updateEntityDto - update entity dto
-	 * @param userId - user id
-	 * @param additionalId - additional id
 	 */
-	abstract update(
-		id: number,
-		updateEntityDto: UpdateEntityDtoType,
-		userId: string,
-		additionalId?: number,
-	): Promise<EntityType>;
+	abstract update(id: number, updateEntityDto: UpdateEntityDtoType): Promise<EntityType>;
 
 	/**
 	 * Generic delete method
 	 * @param id - entity id
-	 * @param additionalId - additional id
 	 */
-	abstract delete(id: number, additionalId?: number): Promise<EntityType>;
+	abstract delete(id: number): Promise<EntityType>;
 }
