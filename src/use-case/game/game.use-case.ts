@@ -5,8 +5,8 @@ import { GameDataService, GameList } from './game-data-service.service';
 export class GameUseCases {
 	constructor(private readonly dataService: GameDataService) {}
 
-	getGameCount(platform: string): Promise<number> {
-		return this.dataService.getGameCount(platform);
+	getGameCount(platform: string, letter: string): Promise<number> {
+		return this.dataService.getGameCount(platform, letter);
 	}
 
 	getGameListByLetter(platform: string, letter: string): Promise<GameList> {

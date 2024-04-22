@@ -7,8 +7,8 @@ export class GameController {
 	constructor(private readonly gameUseCases: GameUseCases) {}
 
 	@Get()
-	getGameCount(@Query('platform') platform: string): Promise<number> {
-		return this.gameUseCases.getGameCount(platform);
+	getGameCount(@Query('platform') platform: string, @Query('letter') letter: string): Promise<number> {
+		return this.gameUseCases.getGameCount(platform, letter);
 	}
 
 	@Get(':letter')
