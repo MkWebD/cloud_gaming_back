@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { GenericOptionsDto } from 'src/core/dto/query/generic-options.dto';
 import { PageMetaDto } from 'src/core/dto/query/pagination/page-meta.dto';
 import { PageOptionsDto } from 'src/core/dto/query/pagination/page-options.dto';
@@ -29,9 +29,9 @@ export class TypeOrmGenericRepository<T> implements ModelGenericRepository<T> {
 	 */
 	async createModel(model: T): Promise<T> {
 		try {
-			return this._repository.save(model);
+			return await this._repository.save(model);
 		} catch (error) {
-			throw new Error(error);
+			throw new BadRequestException(error.message);
 		}
 	}
 
@@ -137,9 +137,9 @@ export class TypeOrmGenericRepository<T> implements ModelGenericRepository<T> {
 			if (!entityToUpdate) {
 				throw new NotFoundException('No entity found');
 			}
-			return this._repository.save(this.deepMergeEntity(entityToUpdate, model));
+			return await this._repository.save(this.deepMergeEntity(entityToUpdate, model));
 		} catch (error) {
-			throw new NotFoundException(error);
+			throw new BadRequestException(error.message);
 		}
 	}
 
